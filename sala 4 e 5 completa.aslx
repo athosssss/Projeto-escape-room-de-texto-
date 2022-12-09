@@ -1,0 +1,456 @@
+<!--Saved by Quest 5.8.6836.13983-->
+<asl version="580">
+  <include ref="Portugues.aslx" />
+  <include ref="Core.aslx" />
+  <game name="Sala Fabio schenekenel">
+    <gameid>3a91d3ff-bf47-419a-a358-9d7c429a29ac</gameid>
+    <version>1.0</version>
+    <firstpublished>2022</firstpublished>
+    <subtitle>por Fabio amaral</subtitle>
+    <author>sckenekenelel</author>
+    <feature_advancedscripts />
+    <turnoffcompass />
+    <command_newline />
+    <attr name="autodescription_youarein_newline" type="boolean">false</attr>
+    <attr name="autodescription_youcansee_newline" type="boolean">false</attr>
+    <attr name="autodescription_youcango_newline" type="boolean">false</attr>
+    <attr name="autodescription_description_newline" type="boolean">false</attr>
+    <pov type="object">player</pov>
+  </game>
+  <object name="Sala numero 4">
+    <inherit name="editor_room" />
+    <isroom />
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <prefix>a</prefix>
+    <descprefix>Você então chega na</descprefix>
+    <objectslistprefix>Dentro da mesma consegue se ver:</objectslistprefix>
+    <dropdestination type="object">Sala numero 4</dropdestination>
+    <description>uma sala pequena, decorada diferentemente das outras, apresentado grande luxo em decorações metalicas colocadas em volta da porta de entrada tanto como a de saida.</description>
+    <exitslistprefix>consigo ir para:</exitslistprefix>
+    <object name="Balança dourada">
+      <inherit name="editor_object" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>uma</prefix>
+      <look>Uma balança grande com um objeto desconhecido no outro lado da mesma, talvez deva usar algo para alcança-lo...</look>
+      <alt type="stringlist">
+        <value>Balança</value>
+      </alt>
+      <displayverbs type="stringlist">
+        <value>Examinar</value>
+      </displayverbs>
+      <drop type="boolean">false</drop>
+      <feature_usegive />
+    </object>
+    <object name="Pilha de lixo">
+      <inherit name="editor_object" />
+      <inherit name="container_closed" />
+      <look>Uma pilha de lixo nojenta, talvez eu consiga achar algo abaixo de tudo isso, mas a que custo?</look>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>uma</prefix>
+      <alt type="stringlist">
+        <value>Pilha</value>
+        <value>Lixo</value>
+      </alt>
+      <displayverbs type="stringlist">
+        <value>Examinar</value>
+        <value>abrir</value>
+      </displayverbs>
+      <drop type="boolean">false</drop>
+      <feature_container />
+      <close type="boolean">false</close>
+      <contentsprefix>Apos remover o llixo consigo ver:</contentsprefix>
+      <openmsg>Remechendo a pilha de lixo e pedaços de madeira finalmente encontro algo de interesse, uma especie de tablete de argila...</openmsg>
+      <onopen type="script">
+        MakeObjectInvisible (Pilha de lixo)
+        AddToInventory (Tablete de argila)
+        AddToInventory (Isqueiro)
+      </onopen>
+      <object name="Tablete de argila">
+        <inherit name="editor_object" />
+        <look type="script">
+          msg ("Um tablete de argila, apos analiza-lo consigo ver diversas descrições, mas por estar humido ele está ilegivel...")
+          MakeObjectInvisible (Tablete de argila)
+          AddToInventory (Tablete de argila úmido)
+        </look>
+        <drop type="boolean">false</drop>
+        <alt type="stringlist">
+          <value>Tablete</value>
+          <value>tablet</value>
+          <value>argila</value>
+        </alt>
+        <displayverbs type="stringlist">
+          <value>Examinar</value>
+        </displayverbs>
+        <feature_usegive />
+        <usedefaultprefix type="boolean">false</usedefaultprefix>
+        <prefix>um</prefix>
+      </object>
+      <object name="Isqueiro">
+        <inherit name="editor_object" />
+        <inherit name="switchable" />
+        <usedefaultprefix type="boolean">false</usedefaultprefix>
+        <prefix>um</prefix>
+        <look>Um isqueiro velho, possivelmente só tem fluido suficiente para ficar aceso por alguns segundos.</look>
+        <displayverbs type="stringlist">
+          <value>Examinar</value>
+        </displayverbs>
+        <drop type="boolean">false</drop>
+        <feature_usegive />
+        <feature_switchable />
+        <switchonmsg>ligo o isqueiro, tenho que agir rapidamente antes que ele apague.</switchonmsg>
+        <switchoffmsg>fecho o isqueiro, devo ser cuidadoso na hora de usa-lo</switchoffmsg>
+        <onswitchon type="script">
+          SetTimeout (10) {
+            msg ("Acabou o fluido do isqueiro, ele rapidamente se apaga e cai ao chão...")
+            MakeObjectInvisible (Isqueiro)
+          }
+        </onswitchon>
+        <selfuseon type="scriptdictionary">
+          <item key="sala">
+            if (not ListContains(ScopeVisible(), Galão de gasolina)) {
+              if (IsSwitchedOn(Isqueiro)) {
+                msg ("jogo o isqueiro na sala, preciso agir rapido, a chama deve se extinguir em alguns segundos")
+                MakeObjectInvisible (Isqueiro)
+              }
+              else {
+                msg ("deveria ligar o isqueiro antes...")
+              }
+            }
+            else {
+              msg ("preciso de algo para acender a chama...")
+            }
+          </item>
+          <item key="vermelha">
+            if (not ListContains(ScopeVisible(), Galão de gasolina)) {
+              if (IsSwitchedOn(Isqueiro)) {
+                msg ("jogo o isqueiro na sala, preciso agir rapido, a chama deve se extinguir em alguns segundos")
+                MakeObjectInvisible (Isqueiro)
+              }
+              else {
+                msg ("deveria ligar o isqueiro antes...")
+              }
+            }
+            else {
+              msg ("preciso de algo para acender a chama...")
+            }
+          </item>
+        </selfuseon>
+      </object>
+    </object>
+    <object name="Revolver velho">
+      <inherit name="editor_object" />
+      <alt type="stringlist">
+        <value>Revolver</value>
+      </alt>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>um</prefix>
+      <look>Um revolver velho, sem balas...</look>
+      <drop type="boolean">false</drop>
+      <feature_usegive />
+      <take />
+      <takemsg>Pego o velho revolver do chão...</takemsg>
+      <selfuseon type="scriptdictionary">
+        <item key="Balança dourada">
+          msg ("Coloco o velho revolver na balança e consigo redistribuir o peso, do outro lado da balança vem um galão de gasolina.")
+          MakeObjectInvisible (Revolver velho)
+          AddToInventory (Galão de gasolina)
+        </item>
+      </selfuseon>
+    </object>
+    <exit alias="porta vemelha" to="Sala vermelha">
+      <inherit name="northwestdirection" />
+      <prefix>uma</prefix>
+      <message type="string"></message>
+    </exit>
+    <exit alias="porta verde" to="Sala verde">
+      <inherit name="northeastdirection" />
+      <prefix>uma</prefix>
+      <message type="string"></message>
+    </exit>
+    <exit name="Cadeado azul" alias="porta azul" to="Sala azul">
+      <inherit name="northdirection" />
+      <prefix>uma</prefix>
+      <lockmessage>A porta esta trancada, preciso de uma chave, e paciencia...</lockmessage>
+      <message type="string"></message>
+      <locked />
+    </exit>
+    <object name="player">
+      <inherit name="editor_object" />
+      <inherit name="editor_player" />
+    </object>
+  </object>
+  <object name="Objetos">
+    <inherit name="editor_room" />
+    <dropdestination type="object">Objetos</dropdestination>
+    <object name="Galão de gasolina">
+      <inherit name="editor_object" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>um</prefix>
+      <look>Um classico galão de gasolina vermelho, aparenta ainda estar cheio...</look>
+      <alt type="stringlist">
+        <value>Galão</value>
+        <value>galao</value>
+        <value>Gasolina</value>
+      </alt>
+      <displayverbs type="stringlist">
+        <value>Examinar</value>
+      </displayverbs>
+      <drop type="boolean">false</drop>
+      <feature_usegive />
+      <selfuseon type="scriptdictionary">
+        <item key="sala">
+          msg ("Cubro a sala de gasolina, uma boa idea para secar o tablete de argila, preciso de uma maneira de iniciar uma chama. ")
+          MakeObjectInvisible (Galão de gasolina)
+        </item>
+        <item key="vermelha">
+          msg ("Cubro a sala de gasolina, uma boa idea para secar o tablete de argila, preciso de uma maneira de iniciar uma chama. ")
+          MakeObjectInvisible (Galão de gasolina)
+        </item>
+      </selfuseon>
+    </object>
+    <object name="Tablete de argila úmido">
+      <inherit name="editor_object" />
+      <look>Um tablete de argila humido, talves seja uma boa ideia seca-lo para poder ler as escrições...</look>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>um</prefix>
+      <alt type="stringlist">
+        <value>Tablete</value>
+        <value>Tablet</value>
+        <value>argila</value>
+      </alt>
+      <displayverbs type="stringlist">
+        <value>Examinar</value>
+      </displayverbs>
+      <drop type="boolean">false</drop>
+      <feature_usegive />
+      <selfuseon type="scriptdictionary">
+        <item key="sala">
+          if (not ListContains(ScopeVisible(), Isqueiro)) {
+            msg ("coloco a placa de argila nas chamas, o calor é muito, e felizmente o suficiente para endurecer o suficiente para conseguir a ler.")
+            MakeObjectInvisible (Tablete de argila úmido)
+            AddToInventory (Tablete de argila legivel)
+          }
+          else {
+            msg ("preciso de uma maneira de aquecer o tablete antes de tentar algo...")
+          }
+        </item>
+        <item key="vermelha">
+          if (not ListContains(ScopeVisible(), Isqueiro)) {
+            msg ("coloco a placa de argila nas chamas, o calor é muito, e felizmente o suficiente para endurecer o suficiente para conseguir a ler.")
+            MakeObjectInvisible (Tablete de argila úmido)
+            AddToInventory (Tablete de argila legivel)
+          }
+          else {
+            msg ("preciso de uma maneira de aquecer o tablete antes de tentar algo...")
+          }
+        </item>
+      </selfuseon>
+    </object>
+    <object name="Tablete de argila legivel">
+      <inherit name="editor_object" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>um</prefix>
+      <look>Agora consigo ler o tablete com ele seco, ela diz "Quebre-me"</look>
+      <alt type="stringlist">
+        <value>Tablete</value>
+        <value>Tablet</value>
+        <value>argila</value>
+      </alt>
+      <displayverbs type="stringlist">
+        <value>Examinar</value>
+      </displayverbs>
+      <drop type="boolean">false</drop>
+      <feature_usegive />
+      <selfuseon type="scriptdictionary">
+        <item key="parede">
+          msg ("Quebro o tablete e uma chave cai, talvez essa seja a correta")
+          MakeObjectInvisible (Tablete de argila legivel)
+          AddToInventory (Chave Vermelha)
+        </item>
+        <item key="teto">
+          msg ("Quebro o tablete e uma chave cai, talvez essa seja a correta")
+          MakeObjectInvisible (Tablete de argila legivel)
+          AddToInventory (Chave Vermelha)
+        </item>
+        <item key="chão">
+          msg ("Quebro o tablete e uma chave cai, talvez essa seja a correta")
+          AddToInventory (Chave Vermelha)
+          MakeObjectInvisible (Tablete de argila legivel)
+        </item>
+      </selfuseon>
+    </object>
+    <object name="Chave azul">
+      <inherit name="editor_object" />
+      <look>Essa aparenta combinar com a fechadura na porta azul...</look>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>uma</prefix>
+      <displayverbs type="stringlist">
+        <value>Examinar</value>
+      </displayverbs>
+      <drop type="boolean">false</drop>
+      <feature_usegive />
+      <selfuseon type="scriptdictionary">
+        <item key="Sala azul">
+          msg ("Detranco a porta, como era de se esperar a chave fica presa...")
+          UnlockExit
+          MakeObjectInvisible (Chave azul)
+        </item>
+      </selfuseon>
+    </object>
+  </object>
+  <object name="Sala vermelha">
+    <inherit name="editor_room" />
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <prefix>Entro na então na</prefix>
+    <descprefix type="string"></descprefix>
+    <objectslistprefix>Você agora consegue observar:</objectslistprefix>
+    <dropdestination type="object">Sala vermelha</dropdestination>
+    <description>A sala pequena é ilumidada por um forte tinto vermelho vindo de uma unica lampada presa ao teto.</description>
+    <exitslistprefix>Posso ir para:</exitslistprefix>
+    <object name="Chave enorme">
+      <inherit name="editor_object" />
+      <take />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>uma</prefix>
+      <look>Uma chave enorme, colossal, gigante, incrivelmente grande...</look>
+      <feature_usegive />
+      <dropmsg>Você larga a chave colossal muito grande enorme no chão</dropmsg>
+      <takemsg>Com um pouco de força e tenacidade você consegue retirar a chave do chão</takemsg>
+    </object>
+    <object name="Chave verde">
+      <inherit name="editor_object" />
+      <take />
+      <look>Um chave esverdeada, estranho...</look>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>uma</prefix>
+      <takemsg>Você pega a chave verde</takemsg>
+      <dropmsg>Você lerga a chave no chão</dropmsg>
+      <feature_usegive />
+    </object>
+    <object name="Chave rustica">
+      <inherit name="editor_object" />
+      <take />
+      <look>Uma chave rustica, velha mas aparenta ser funcional...</look>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>uma</prefix>
+      <alt type="stringlist">
+        <value>rustica</value>
+      </alt>
+      <takemsg>Você pega a chave do chão da sala</takemsg>
+      <dropmsg>Você larga a chave</dropmsg>
+      <feature_usegive />
+    </object>
+    <exit alias="sala principal" to="Sala numero 4">
+      <inherit name="southeastdirection" />
+      <prefix>a</prefix>
+      <message type="string"></message>
+      <suffix type="string"></suffix>
+    </exit>
+    <object name="vermelha">
+      <inherit name="editor_object" />
+      <visible type="boolean">false</visible>
+      <alt type="stringlist">
+        <value>sala</value>
+        <value>sala vermelha</value>
+      </alt>
+    </object>
+  </object>
+  <object name="Sala azul">
+    <inherit name="editor_room" />
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <prefix>Entro na então na</prefix>
+    <descprefix>Agora na sala azul</descprefix>
+    <objectslistprefix>Você vê</objectslistprefix>
+    <dropdestination type="object">Sala azul</dropdestination>
+    <description>A sala é ilumidada por uma forte luz azul presa no teto, pode se ler parabens em uma placa colocada na porta a sua frente...</description>
+    <exitslistprefix>Agora posso ir para:</exitslistprefix>
+    <exit alias="porta final" to="sala final">
+      <inherit name="southdirection" />
+      <prefix>a</prefix>
+      <lockmessage type="string"></lockmessage>
+    </exit>
+  </object>
+  <object name="Sala verde">
+    <inherit name="editor_room" />
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <prefix>Entro na então na</prefix>
+    <descprefix type="string"></descprefix>
+    <objectslistprefix>Aqui consigo ver:</objectslistprefix>
+    <dropdestination type="object">Sala verde</dropdestination>
+    <description>A sala é iluminda por uma forte luz verde, quanto será a conta eletrica desse povo?</description>
+    <exitslistprefix>posso ir para:</exitslistprefix>
+    <object name="Chave minuscula">
+      <inherit name="editor_object" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>uma</prefix>
+      <look>Uma chave minuscula ridiculamente pequena, bom..., na verdade eu diria na media...</look>
+      <take />
+      <takemsg>Com sua confiavel pinça você retira a chave do chão...</takemsg>
+      <dropmsg>Você larga a chave no chão e ela se perde entre o lixo no chão.</dropmsg>
+      <feature_usegive />
+    </object>
+    <object name="Chave suja">
+      <inherit name="editor_object" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>uma</prefix>
+      <look>Uma chave imunda</look>
+      <take />
+      <takemsg>Mesmo que relutante você pega a chave suja do chão.</takemsg>
+      <dropmsg>Largo a chave imunda no chão.</dropmsg>
+      <feature_usegive />
+    </object>
+    <object name="Chave estranha">
+      <inherit name="editor_object" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>uma</prefix>
+      <look>Uma chave estranha metalica, toda retorcida, a unica coisa que diz que isso é uma chave é seu instinto de protagonista...</look>
+      <take />
+      <takemsg>Pego a cave anormal do chão</takemsg>
+      <dropmsg>Largo então a chave estranha no chão...</dropmsg>
+      <feature_usegive />
+    </object>
+    <exit alias="sala principal" to="Sala numero 4">
+      <inherit name="southwestdirection" />
+      <prefix>a</prefix>
+      <message type="string"></message>
+    </exit>
+    <object name="sala">
+      <inherit name="editor_object" />
+      <scenery />
+      <alt type="stringlist">
+        <value>verde</value>
+        <value>sala verde</value>
+      </alt>
+    </object>
+  </object>
+  <object name="sala final">
+    <inherit name="editor_room" />
+    <exitslistprefix type="string"></exitslistprefix>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <prefix>a</prefix>
+    <descprefix>agora me encontro na</descprefix>
+    <objectslistprefix>aqui consigo ver:</objectslistprefix>
+    <dropdestination type="object">sala final</dropdestination>
+    <description>dentro da sala consigo ver nada alem de varios baloes e decorações , consegui escapar da escape room, finalmente...</description>
+    <object name="gerador de codigo">
+      <inherit name="editor_object" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>um</prefix>
+      <look>uma maquina capaz de gerar um codigo para um possivel premio, algo ja esta escrito no monitor</look>
+      <alt type="stringlist">
+        <value>maquina</value>
+        <value>gerador</value>
+        <value>codigo</value>
+      </alt>
+      <drop type="boolean">false</drop>
+      <take />
+      <takemsg>pego o gerador de codigos, consigo brevemente ler o codigo...</takemsg>
+      <ontake type="script"><![CDATA[
+        PrintCentered ("")
+        PrintCentered ("\"UHB8765\"<br/>")
+        PrintCentered ("obrigado por jogar!!")
+        PrintCentered ("feito pelos alunos do segundo ano tarde :)")
+      ]]></ontake>
+    </object>
+  </object>
+</asl>

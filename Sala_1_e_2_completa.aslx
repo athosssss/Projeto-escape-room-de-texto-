@@ -1,0 +1,631 @@
+<!--Saved by Quest 5.8.6836.13983-->
+<asl version="580">
+  <include ref="Portugues.aslx" />
+  <include ref="Core.aslx" />
+  <game name="Escape Room Senacrs">
+    <inherit name="theme_novella" />
+    <gameid>75bf69c6-c734-47b7-9325-796b798a29b8</gameid>
+    <version>1.0</version>
+    <firstpublished>2022</firstpublished>
+    <author>Athos Alonso, João Augusto, Fabio Schneckel e Lucas Sol </author>
+    <subtitle type="string"></subtitle>
+    <attr name="feature_advancedwearables" type="boolean">false</attr>
+    <appendobjectdescription />
+    <gridmap type="boolean">false</gridmap>
+    <showpanes />
+    <turnoffcompass />
+    <borderlesscursor />
+    <command_newline />
+    <clearscreenonroomenter type="boolean">false</clearscreenonroomenter>
+    <attr name="autodescription_youcansee" type="int">3</attr>
+    <attr name="autodescription_youcango" type="int">4</attr>
+    <attr name="autodescription_description" type="int">2</attr>
+    <setbackgroundopacity />
+    <backgroundopacity type="double">0.5</backgroundopacity>
+    <defaultfont>Arial, Helvetica, sans-serif</defaultfont>
+  </game>
+  <object name="Sala 2">
+    <inherit name="editor_room" />
+    <isroom />
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <prefix type="string"></prefix>
+    <descprefix>Abrindo a porta você entra na</descprefix>
+    <objectslistprefix>Na sala pode-se ver:</objectslistprefix>
+    <description>Uma sala pequena empoeirada, Uma placa com o numero 2 fica decorativamente colocada ao lado da porta.</description>
+    <dropdestination type="object">Sala 2</dropdestination>
+    <exit name="trava porta 2" alias="Porta ao norte" to="Sala 3">
+      <inherit name="northdirection" />
+      <locked />
+      <prefix>a</prefix>
+      <lockmessage>Voce tenta, mas a porta está trancada.</lockmessage>
+    </exit>
+    <object name="Pilha de lenha">
+      <inherit name="editor_object" />
+      <inherit name="container_open" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>uma</prefix>
+      <take />
+      <drop type="boolean">false</drop>
+      <attr name="feature_container" type="boolean">false</attr>
+      <open type="boolean">false</open>
+      <close type="boolean">false</close>
+      <contentsprefix>ainda a um pouco de lenha, aparenta ter algo abaixo do material...</contentsprefix>
+      <hidechildren />
+      <takemsg>Você pega o restante da lenha, uma pequena haste de ferro cai no chão da sala ao retirala de sua base...</takemsg>
+      <feature_usegive />
+      <displayverbs type="stringlist">
+        <value>Examinar</value>
+        <value>pegar</value>
+      </displayverbs>
+      <inventoryverbs type="stringlist">
+        <value>Examinar</value>
+        <value>Usar</value>
+      </inventoryverbs>
+      <look>Restos de madeira antiga, possivelmente ainda podem ser utilizadas em alguma capacidade.</look>
+      <alt type="stringlist">
+        <value>lenha</value>
+        <value>madeira</value>
+        <value>pilha</value>
+      </alt>
+      <ontake type="script">
+        MakeObjectVisible (Haste de ferro)
+        AddToInventory (Haste de ferro)
+      </ontake>
+      <selfuseon type="scriptdictionary">
+        <item key="Lareira grande">
+          msg ("Você coloca a lenha na lareira, talvez com um isqueiro eu consiga acender uma chama.")
+          MakeObjectInvisible (Pilha de lenha)
+        </item>
+      </selfuseon>
+    </object>
+    <object name="Chão falso">
+      <inherit name="editor_object" />
+      <inherit name="container_closed" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>uma especie de </prefix>
+      <feature_container />
+      <contentsprefix type="string"></contentsprefix>
+      <close type="boolean">false</close>
+      <hidechildren />
+      <listchildren />
+      <gender>ele</gender>
+      <displayverbs type="stringlist">
+        <value>Examinar</value>
+        <value>Abrir</value>
+      </displayverbs>
+      <drop type="boolean">false</drop>
+      <openmsg>Com um pouco de força voce consegue abir o chão falso.</openmsg>
+      <inroomdescription type="string"></inroomdescription>
+      <look>Um pedaço do chão está solto, talvez com um pouco de força eu seja capaz de abri-lo.</look>
+      <listchildrenprefix>ele contêm os seguintes materiais:</listchildrenprefix>
+      <alt type="stringlist">
+        <value>piso falso</value>
+        <value>piso</value>
+        <value>chao falso</value>
+        <value>chao</value>
+        <value>chão</value>
+      </alt>
+      <object name="Isqueiro">
+        <inherit name="editor_object" />
+        <inherit name="switchable" />
+        <usedefaultprefix type="boolean">false</usedefaultprefix>
+        <prefix>um</prefix>
+        <feature_usegive />
+        <feature_switchable />
+        <switchonmsg>Você liga o isqueiro e uma pequena chama se acende</switchonmsg>
+        <switchoffmsg>A pequena chama rapidamente se estingue</switchoffmsg>
+        <look>Um isqueiro pequeno, pelo som ainda resta algum pouco de fluido, poderia acender algo com ele.</look>
+        <takemsg>Você pega o isqueiro da pequena cavidade.</takemsg>
+        <displayverbs type="stringlist">
+          <value>Examinar</value>
+          <value>Pegar</value>
+        </displayverbs>
+        <inventoryverbs type="stringlist">
+          <value>Examinar</value>
+          <value>Usar</value>
+          <value>Ativar</value>
+          <value>Desativar</value>
+        </inventoryverbs>
+        <take />
+        <drop type="boolean">false</drop>
+        <selfuseon type="scriptdictionary">
+          <item key="Lareira grande">
+            if (not ListContains(ScopeVisible(), Pilha de lenha)) {
+              if (IsSwitchedOn(Isqueiro)) {
+                msg ("Voce consegue iniciar uma chama com o isqueiro e com a lenha")
+                RemoveObject (Isqueiro)
+                MoveObjectHere (Chama)
+                MakeObjectVisible (Chama)
+              }
+              else if (not IsSwitchedOn(Isqueiro)) {
+                msg ("Talvez eu deveria acender o isqueiro antes de tentar algo...")
+              }
+              else {
+                msg ("preciso de algo para iniciar a chama...")
+              }
+            }
+          </item>
+          <item key="Pilha de lenha">
+            msg ("Eu deveria colocar a lenha na lareira primeiro antes de tentar algo...")
+          </item>
+        </selfuseon>
+      </object>
+      <object name="Garrafa com oleo">
+        <inherit name="editor_object" />
+        <inherit name="switchable" />
+        <usedefaultprefix type="boolean">false</usedefaultprefix>
+        <prefix>uma</prefix>
+        <take />
+        <takemsg>Você pega a garrafa e consegue escutar um som metalico emanar de dentro dela.</takemsg>
+        <drop type="boolean">false</drop>
+        <feature_usegive />
+        <look>Uma garrafa com uma especie de liquido oleoso dentro, pode-se ver algo metalico dentro do liquido, mas a boca da garrafa não é grande o suficiente para a passagem do objeto.</look>
+        <inventoryverbs type="stringlist">
+          <value>Examinar</value>
+        </inventoryverbs>
+        <use type="boolean">false</use>
+        <attr name="feature_switchable" type="boolean">false</attr>
+        <displayverbs type="stringlist">
+          <value>Examinar</value>
+          <value>Pegar</value>
+        </displayverbs>
+        <attr name="feature_startscript" type="boolean">false</attr>
+        <attr name="feature_edible" type="boolean">false</attr>
+        <switchedon type="boolean">false</switchedon>
+        <switchonmsg>Você quebra a garrafa.</switchonmsg>
+        <alt type="stringlist">
+          <value>garrafa com oleo</value>
+          <value>oleo</value>
+          <value>garrafa</value>
+        </alt>
+        <onswitchon type="script">
+          msg ("cu penis")
+        </onswitchon>
+        <ontake type="script">
+        </ontake>
+        <selfuseon type="scriptdictionary">
+          <item key="chão">
+            msg ("Voce joga garrafa contra o chão, ela se etilhaça mas dentre os cacos de vidro você consegue ver uma pequena chave metalica, infelizamente ela não pode ser pega pois está coberta de oleo, a fazendo deslizar de suas mãos, talvez seria util alguma ferramenta para conseguir engancha-la")
+            RemoveObject (Garrafa com oleo)
+            MakeObjectVisible (Chave coberta de oleo)
+          </item>
+          <item key="parede">
+            msg ("Voce joga garrafa contra a parede, ela se etilhaça mas dentre os cacos de vidro você consegue ver uma pequena chave metalica, infelizamente ela não pode ser pega pois está coberta de oleo, a fazendo deslizar de suas mãos, talvez seria util alguma ferramenta para conseguir engancha-la")
+            RemoveObject (Garrafa com oleo)
+            MakeObjectVisible (Chave coberta de oleo)
+          </item>
+          <item key="teto">
+            msg ("Voce joga garrafa contra o teto, ela se etilhaça mas dentre os cacos de vidro você consegue ver uma pequena chave metalica, infelizamente ela não pode ser pega pois está coberta de oleo, a fazendo deslizar de suas mãos, talvez seria util alguma ferramenta para conseguir engancha-la")
+            RemoveObject (Garrafa com oleo)
+            MakeObjectVisible (Chave coberta de oleo)
+          </item>
+          <item key="Lareira grande">
+            msg ("Voce joga garrafa contra a lareira, ela se etilhaça mas dentre os cacos de vidro você consegue ver uma pequena chave metalica, infelizamente ela não pode ser pega pois está coberta de oleo, a fazendo deslizar de suas mãos, talvez seria util alguma ferramenta para conseguir engancha-la")
+            RemoveObject (Garrafa com oleo)
+            MakeObjectVisible (Chave coberta de oleo)
+          </item>
+          <item key="porta ao norte">
+            msg ("Voce joga garrafa contra o chão, ela se etilhaça mas dentre os cacos de vidro você consegue ver uma pequena chave metalica, infelizamente ela não pode ser pega pois está coberta de oleo, a fazendo deslizar de suas mãos, talvez seria util alguma ferramenta para conseguir engancha-la")
+            RemoveObject (Garrafa com oleo)
+            MakeObjectVisible (Chave coberta de oleo)
+          </item>
+        </selfuseon>
+      </object>
+      <object name="Lanterna">
+        <inherit name="editor_object" />
+        <inherit name="switchable" />
+        <usedefaultprefix type="boolean">false</usedefaultprefix>
+        <prefix>uma</prefix>
+        <suffix> que aparenta estar sem bateria.</suffix>
+        <take />
+        <drop type="boolean">false</drop>
+        <takemsg>Você pega a lanterna da cavidade.</takemsg>
+        <look>Uma lanterna velha, sem baterias mas aparenta ainda estar em boas condições.</look>
+        <attr name="feature_usegive" type="boolean">false</attr>
+        <feature_switchable />
+        <switchonmsg>Você liga a lanterna mas com a falta das baterias nada acontece.</switchonmsg>
+        <switchoffmsg>Você desliga a lanterna.</switchoffmsg>
+        <displayverbs type="stringlist">
+          <value>Examinar</value>
+          <value>Pegar</value>
+        </displayverbs>
+        <inventoryverbs type="stringlist">
+          <value>Examinar</value>
+          <value>Usar</value>
+          <value>Ativar</value>
+          <value>Desativar</value>
+        </inventoryverbs>
+      </object>
+    </object>
+    <object name="Haste de ferro">
+      <inherit name="editor_object" />
+      <visible type="boolean">false</visible>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>uma</prefix>
+      <article>a</article>
+      <look>Uma haste metalica levemente enferrujada, talvez eu consiga prender algo na ponta dela.</look>
+      <take />
+      <takemsg>Você pega a haste metalica do chão.</takemsg>
+      <drop type="boolean">false</drop>
+      <feature_usegive />
+      <alt type="stringlist">
+        <value>haste</value>
+        <value>ferro</value>
+      </alt>
+      <inventoryverbs type="stringlist">
+        <value>Examinar</value>
+        <value>Usar</value>
+      </inventoryverbs>
+      <selfuseon type="scriptdictionary">
+        <item key="Chave coberta de oleo">
+          msg ("Você prende a chave na ponta da haste metalica")
+          RemoveObject (Haste de ferro)
+          RemoveObject (Chave coberta de oleo)
+          AddToInventory (Haste metalica com chave)
+          MakeObjectVisible (Haste metalica com chave)
+        </item>
+      </selfuseon>
+    </object>
+    <object name="Lareira grande">
+      <inherit name="editor_object" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <article>a</article>
+      <prefix>uma</prefix>
+      <look>Uma Lareira enorme feita de tijolos vermelhos, ainda há espaço para lenha, mas atualmente ela permanece vazia.</look>
+      <displayverbs type="stringlist">
+        <value>Examinar</value>
+        <value>usar</value>
+      </displayverbs>
+      <inventoryverbs type="stringlist">
+        <value>Examinar</value>
+      </inventoryverbs>
+      <feature_usegive />
+      <use type="boolean">false</use>
+      <alt type="stringlist">
+        <value>Lareira</value>
+        <value>fogueira</value>
+      </alt>
+      <drop type="boolean">false</drop>
+    </object>
+    <object name="Chave coberta de oleo">
+      <inherit name="editor_object" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <article>a</article>
+      <prefix>uma</prefix>
+      <look>Uma chave metalica coberta pelo mesmo oleo da garrafa, não consigo pegar ela diretamente por causa do liquido escorregadio.</look>
+      <take type="boolean">false</take>
+      <drop type="boolean">false</drop>
+      <inventoryverbs type="stringlist">
+        <value>Examinar</value>
+        <value>Usar</value>
+      </inventoryverbs>
+      <feature_usegive />
+      <visible type="boolean">false</visible>
+      <alt type="stringlist">
+        <value>chave</value>
+      </alt>
+      <takemsg>Você tenta pegar a chave mas ela escapa entre seus dedos, melhor pegar algo que fique mais preso a ela.</takemsg>
+      <selfuseon type="scriptdictionary">
+        <item key="Haste de ferro">
+          msg ("Você cuidadosamente prende a chave na pornta da haste de ferro")
+          RemoveObject (Haste de ferro)
+          RemoveObject (Chave coberta de oleo)
+          AddToInventory (Haste metalica com chave)
+        </item>
+      </selfuseon>
+    </object>
+    <object name="Haste metalica com chave">
+      <inherit name="editor_object" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <visible type="boolean">false</visible>
+      <prefix>uma</prefix>
+      <article>a</article>
+      <look>Uma chave presa na ponta de uma haste metalica.</look>
+      <take type="boolean">false</take>
+      <drop type="boolean">false</drop>
+      <feature_usegive />
+      <alt type="stringlist">
+        <value>haste</value>
+        <value>chave</value>
+        <value>haste metalica</value>
+        <value>haste com chave</value>
+      </alt>
+      <inventoryverbs type="stringlist">
+        <value>Examinar</value>
+        <value>Usar</value>
+      </inventoryverbs>
+      <selfuseon type="scriptdictionary">
+        <item key="Chama">
+          msg ("Você coloca a chave sobre a brasa e o oleo que cobria a chave evapora rapidamente")
+          RemoveObject (Haste metalica com chave)
+          AddToInventory (Chave)
+          MakeObjectVisible (Chave)
+          msg ("voce então retira a chave da haste, a haste quebra mas agora voce pode usar a chave normalmente.")
+        </item>
+      </selfuseon>
+    </object>
+    <object name="Chave">
+      <inherit name="editor_object" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <visible type="boolean">false</visible>
+      <look>Uma chave pequena, finalmente seca sem a camada de oleo, posso usa-la para destrancar algo...</look>
+      <prefix>uma</prefix>
+      <article>a</article>
+      <drop type="boolean">false</drop>
+      <feature_usegive />
+      <inventoryverbs type="stringlist">
+        <value>Examinar</value>
+        <value>Usar</value>
+      </inventoryverbs>
+      <use type="script">
+        UnlockExit (trava porta 2)
+        RemoveObject (Chave)
+        msg ("Você destranca a porta com a chave a deixando presa na fechadura do cadeado.")
+        SetTimeout (3) {
+          MoveObject (player, Sala 3)
+        }
+      </use>
+    </object>
+    <object name="chão">
+      <inherit name="editor_object" />
+      <scenery type="boolean">false</scenery>
+      <look>Piso amadeirado velho, nada a acrescentar...</look>
+      <drop type="boolean">false</drop>
+      <visible type="boolean">false</visible>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+    </object>
+    <object name="teto">
+      <inherit name="editor_object" />
+      <scenery />
+      <look>Teto sujo e gasto, nada demais...</look>
+      <drop type="boolean">false</drop>
+    </object>
+    <object name="parede">
+      <inherit name="editor_object" />
+      <scenery />
+      <visible />
+      <look>Apenas paredes gastas, nada demais.</look>
+      <drop type="boolean">false</drop>
+    </object>
+    <object name="porta ao norte">
+      <inherit name="editor_object" />
+      <scenery />
+      <article>a</article>
+      <look>Uma porta com o numero 3 desenhado em tinta roxa, fechada por um cadeado mantendo a maçaneta presa...</look>
+      <alt type="stringlist">
+        <value>porta</value>
+        <value>saida</value>
+      </alt>
+      <drop type="boolean">false</drop>
+      <feature_usegive />
+      <useon type="scriptdictionary">
+        <item key="Chave">
+          msg ("Voce destranca o cadeado com a chave, ela fica presa ao mesmo mas a porta se abre...")
+          RemoveObject (Chave)
+          UnlockExit (trava porta 2)
+        </item>
+      </useon>
+    </object>
+    <object name="Chama">
+      <inherit name="editor_object" />
+      <visible type="boolean">false</visible>
+      <scenery type="boolean">false</scenery>
+      <look>Fogo criado pela chama do isqueiro em combinação com os restos de lenha...</look>
+      <displayverbs type="stringlist">
+        <value>Examinar</value>
+      </displayverbs>
+      <alt type="stringlist">
+        <value>fogo</value>
+      </alt>
+      <feature_usegive />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+    </object>
+  </object>
+  <object name="Sala 3">
+    <inherit name="editor_room" />
+  </object>
+  <object name="Primeira sala">
+    <inherit name="editor_room" />
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <dropdestination type="object">Primeira sala</dropdestination>
+    <prefix type="string"></prefix>
+    <descprefix>Você acorda na </descprefix>
+    <objectslistprefix>Na sala é possivel ver:</objectslistprefix>
+    <description type="script"><![CDATA[
+      msg ("<br/>Essa sala serve como Tutorial das mecanicas da escape room, primeiramente note que a direita há duas abas, uma delas é o inventario (que conteem os objetos pegos durante a aventura), e a de lugares e objetos (que mostra tudo no cenario) ao clicar nos objetos ou lugares há 3 principais expressoes utilizadas durante o jogo<br/>")
+      SetTimeout (6) {
+        msg ("<br/>-> Ligar/Desligar: alguns itens podem ter funções como essas, tente digitar no chat ou ver a aba de itens e objetos.<br/>")
+      }
+      SetTimeout (10) {
+        msg ("-> Usar: deve ser utilizado desta maneira \"usar X em Y\", ou \"usar X no/na Y\"<br/>")
+      }
+      SetTimeout (14) {
+        msg ("-> Examinar: dá uma explicação detalhada sobre o item (As vezes podem servir como dicas)<br/>")
+      }
+      SetTimeout (20) {
+        msg ("O objetivo deste jogo é utilizar dos recursos econtrados nas salas para poder achar a chave que o levará para a proxima, tome cuidado pois alguns objetos podem ser inuteis em uma sala mas serem importantes em outras, boa sorte!!")
+      }
+    ]]></description>
+    <exitslistprefix>Você pode ver uma </exitslistprefix>
+    <exit name="Primeira trava" alias="Porta ao leste" to="Sala 2">
+      <inherit name="eastdirection" />
+      <prefix type="string"></prefix>
+      <locked />
+      <lockmessage>Você tenta abrir a porta mas ela requer uma chave...</lockmessage>
+    </exit>
+    <object name="Cofre">
+      <inherit name="editor_object" />
+      <inherit name="container_closed" />
+      <inherit name="container_lockable" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>um</prefix>
+      <look>Um cofre pequeno de combinação, aparentemente aceita até 3 digitos.</look>
+      <drop type="boolean">false</drop>
+      <attr name="feature_usegive" type="boolean">false</attr>
+      <useon type="scriptdictionary">
+        <item key="Papel velho">
+          RemoveObject (papel com senha)
+          msg ("Você coloca a senha no cofre, ele abre!")
+          HelperOpenObject (Cofre)
+        </item>
+      </useon>
+      <feature_container />
+      <close type="boolean">false</close>
+      <listchildren />
+      <listchildrenprefix>Dentro do cofre consegue se ver uma </listchildrenprefix>
+      <openmsg>Ao abrir o cofre sua porta cai, felizmente o conteudo no seu interior não foi afetado...</openmsg>
+      <displayverbs type="stringlist">
+        <value>Examinar</value>
+        <value>Abrir</value>
+      </displayverbs>
+      <onopen type="script">
+        MakeObjectVisible (Chave pequena)
+      </onopen>
+      <open />
+      <contentsprefix type="string"></contentsprefix>
+      <autounlock type="boolean">false</autounlock>
+      <keycount type="int">1</keycount>
+      <key type="object">Papel com senha</key>
+      <nokeymessage>Você não tem a senha.</nokeymessage>
+      <object name="Chave pequena">
+        <inherit name="editor_object" />
+        <gender>uma</gender>
+        <visible type="boolean">false</visible>
+        <article>a</article>
+        <look>Uma chave pequena, posso usa-la na fechadura da porta...</look>
+        <alt type="stringlist">
+          <value>Chave</value>
+        </alt>
+        <drop type="boolean">false</drop>
+        <take />
+        <feature_usegive />
+        <selfuseon type="scriptdictionary">
+          <item key="Porta ao leste">
+          </item>
+        </selfuseon>
+        <takemsg>Você retira a chave de dentro do cofre.</takemsg>
+        <inventoryverbs type="stringlist">
+          <value>Examinar</value>
+          <value>Usar</value>
+        </inventoryverbs>
+      </object>
+    </object>
+    <object name="Escrivaninha">
+      <inherit name="editor_object" />
+      <inherit name="container_closed" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>uma</prefix>
+      <article>a</article>
+      <look>Uma escrivaninha velha, uma gaveta aparece ainda funcionar...</look>
+      <alt type="stringlist">
+        <value>Mesa</value>
+      </alt>
+      <drop type="boolean">false</drop>
+      <attr name="feature_usegive" type="boolean">false</attr>
+      <feature_container />
+      <close type="boolean">false</close>
+      <listchildren />
+      <displayverbs type="stringlist">
+        <value>Examinar</value>
+        <value>Abrir</value>
+      </displayverbs>
+      <useindividualverblist type="boolean">false</useindividualverblist>
+      <contentsprefix type="string"></contentsprefix>
+      <gender>ela</gender>
+      <listchildrenprefix>Dentro das gavetas consegue se ver:</listchildrenprefix>
+      <openmsg>Você abre a gaveta da escrivaninha com cuidado...</openmsg>
+      <object name="Papel velho">
+        <inherit name="editor_object" />
+        <visible />
+        <look type="script">
+          msg ("Um papel pequeno com os numeros 541 escritos em um dos lados, talvez sirva para algo...")
+          RemoveObject (Papel velho)
+          MakeObjectVisible (Papel com senha)
+          AddToInventory (Papel com senha)
+        </look>
+        <drop type="boolean">false</drop>
+        <take />
+        <attr name="feature_usegive" type="boolean">false</attr>
+        <alt type="stringlist">
+          <value>Papel</value>
+        </alt>
+        <selfuseon type="scriptdictionary" />
+        <inventoryverbs type="stringlist">
+          <value>Examinar</value>
+          <value>Usar</value>
+        </inventoryverbs>
+        <takemsg>Você retira o papel da gaveta...</takemsg>
+        <gender>um</gender>
+        <usedefaultprefix type="boolean">false</usedefaultprefix>
+        <prefix>um</prefix>
+      </object>
+    </object>
+    <object name="Porta ao leste">
+      <inherit name="editor_object" />
+      <visible />
+      <scenery />
+      <article>a</article>
+      <look>Uma porta gasta com uma pequena fechadura me impedindo de abri-la, na porta o numero 2 fica delicadametente decorado na porta.</look>
+      <drop type="boolean">false</drop>
+      <alt type="stringlist">
+        <value>Porta</value>
+        <value>saida</value>
+      </alt>
+      <feature_usegive />
+      <useon type="scriptdictionary">
+        <item key="Chave pequena">
+          msg ("Você usa a pequena chave para destrancar a porta, a partir de agora você tem 5 minutos para escapar as 3 ultimas salas...")
+          RemoveObject (Chave pequena)
+          UnlockExit (Primeira trava)
+          EnableTimer (FIM DE JOGO)
+          SetTimeout (5) {
+            MoveObject (player, Sala 2)
+          }
+          SetTimeout (1) {
+            msg ("Você sai da sala, utilizando da chave para abrir o cadeado, ela ficou presa, mas você consegue sair...")
+          }
+        </item>
+      </useon>
+    </object>
+    <object name="Papel com senha">
+      <inherit name="editor_object" />
+      <visible type="boolean">false</visible>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <inroomdescription type="string"></inroomdescription>
+      <look>Papel com a senha 451, talvez sirva para algo...</look>
+      <alt type="stringlist">
+        <value>senha</value>
+        <value>papel</value>
+      </alt>
+      <displayverbs type="stringlist">
+        <value>Examinar</value>
+      </displayverbs>
+      <inventoryverbs type="stringlist">
+        <value>Examinar</value>
+        <value>Usar</value>
+      </inventoryverbs>
+      <drop type="boolean">false</drop>
+      <feature_usegive />
+      <selfuseon type="scriptdictionary">
+        <item key="Cofre">
+          msg ("Você usa a senha no cofre e sua porta abre, uma pequena chave pode ser vista em seu interior")
+          RemoveObject (Papel com senha)
+          HelperOpenObject (Cofre)
+        </item>
+      </selfuseon>
+      <article>um</article>
+      <gender>o</gender>
+    </object>
+    <object name="player">
+      <inherit name="editor_object" />
+      <inherit name="editor_player" />
+    </object>
+  </object>
+  <timer name="FIM DE JOGO">
+    <interval>300</interval>
+    <script>
+      msg ("O tempo acabou, você perdeu")
+      finish
+    </script>
+  </timer>
+</asl>
